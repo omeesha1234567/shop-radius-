@@ -1,363 +1,735 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Registration</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    
-    <!-- CSS Section -->
     <style>
-        /* Custom animations */
-        .slide-in {
-            animation: slideIn 0.3s ease-out;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
-        .slide-out {
-            animation: slideOut 0.3s ease-out;
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #5a4835 0%, #491b05 100%);
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideOut {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(-100%);
-            }
-        }
-
-        /* Custom styles */
-        .form-section {
+        .container {
+            position: relative;
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.15);
+            backdrop-filter: blur(5px);
             transition: all 0.3s ease;
         }
 
-        .progress-circle {
-            transition: background-color 0.3s ease;
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(139, 69, 19, 0.2);
+        }
+
+        .container header {
+            font-size: 2rem;
+            color: #352214;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+      
+
+        .container .form {
+            margin-top: 30px;
+        }
+
+        .form .page {
+            display: none;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+        }
+
+        .form .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .form .title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #46280d;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 10px;
+        }
+
+        .form .fields {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .input-field {
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            width: calc(100% / 2 - 15px);
+            margin-bottom: 15px;
         }
 
-        .input-field:focus {
-            border-color: #3B82F6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        .input-field label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2e2e2e;
+            margin-bottom: 5px;
+            display: block;
         }
 
-        .btn-hover {
+        .input-field input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dddddd;
+            border-radius: 5px;
+            outline: none;
             transition: all 0.3s ease;
         }
 
-        .btn-hover:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .input-field input:focus {
+            border-color: #1a1511;
+            box-shadow: 0 0 5px rgba(139, 69, 19, 0.2);
         }
 
-        /* Error states */
-        .error-input {
-            border-color: #EF4444;
+        .form button {
+            padding: 10px 25px;
+            background: #503d2f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
         }
 
-        .error-message {
-            color: #EF4444;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
+        .form button:hover {
+            background: #654321;
+            transform: translateY(-2px);
         }
 
-        /* Success states */
-        .success-input {
-            border-color: #10B981;
+        .buttons {
+            display: flex;
+            gap: 15px;
         }
 
-        /* Loading state */
-        .loading {
+        .progress-bar {
+            display: flex;
+            margin: 40px 0;
+            user-select: none;
+        }
+
+        .progress-bar .step {
+            text-align: center;
+            width: 100%;
             position: relative;
-            pointer-events: none;
-            opacity: 0.7;
         }
 
-        .loading::after {
-            content: "";
+        .progress-bar .step p {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #3a2505;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar .step .bullet {
+            height: 25px;
+            width: 25px;
+            border: 2px solid #000;
+            display: inline-block;
+            border-radius: 50%;
+            position: relative;
+            transition: 0.2s;
+            font-weight: 500;
+            font-size: 0.9rem;
+            line-height: 25px;
+        }
+
+        .progress-bar .step .bullet.active {
+            border-color: #7c5f49;
+            background: #8B4513;
+            color: #fff;
+        }
+
+        .progress-bar .step .bullet span {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .progress-bar .step .bullet:before,
+        .progress-bar .step .bullet:after {
+            position: absolute;
+            content: '';
+            bottom: 11px;
+            right: -95px;
+            height: 3px;
+            width: 95px;
+            background: #262626;
+        }
+
+        .progress-bar .step .bullet.active:after {
+            background: #8B4513;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: animate 0.3s linear forwards;
+        }
+
+        @keyframes animate {
+            100% {
+                transform: scaleX(1);
+            }
+        }
+
+        .progress-bar .step:last-child .bullet:before,
+        .progress-bar .step:last-child .bullet:after {
+            display: none;
+        }
+
+        .success-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .success-message {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 1.5rem;
-            height: 1.5rem;
-            border: 2px solid #ffffff;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            min-width: 320px;
+        }
+
+        .success-message i {
+            font-size: 80px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .success-message h2 {
+            color: #8B4513;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .success-message p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .success-message .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .success-message button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .success-message button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .input-field textarea,
+        .input-field select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-field textarea:focus,
+        .input-field select:focus {
+            border-color: #8B4513;
+            box-shadow: 0 0 5px rgba(139, 69, 19, 0.2);
+        }
+
+        .error-message {
+            color: #ff0000;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .input-field.error input,
+        .input-field.error select,
+        .input-field.error textarea {
+            border-color: #ff0000;
+        }
+
+        .input-field.error .error-message {
+            display: block;
+        }
+
+        /* Loading spinner for form submission */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1000;
+        }
+
+        .loading:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #8B4513;
             border-radius: 50%;
             border-top-color: transparent;
             animation: spin 1s linear infinite;
+            box-shadow: 0 2px 10px rgba(139, 69, 19, 0.2);
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+<body>
+    <div class="container">
+        <header>Shop Registration Form</header>
+        
+        <div class="progress-bar">
+            <div class="step">
+                <p>Personal Info</p>
+                <div class="bullet active">
+                    <span>1</span>
+                </div>
+            </div>
+            <div class="step">
+                <p>Shop Details</p>
+                <div class="bullet">
+                    <span>2</span>
+                </div>
+            </div>
+            <div class="step">
+                <p>Security</p>
+                <div class="bullet">
+                    <span>3</span>
+                </div>
+            </div>
+        </div>
 
-<body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen">
-    <div class="container mx-auto p-4">
-        <div class="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow-2xl flex flex-col md:flex-row">
-            <!-- Progress Sidebar -->
-            <div class="bg-blue-600 text-white rounded-xl p-6 md:w-1/3 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center mb-6">
-                        <div class="w-8 h-8 bg-blue-800 rounded-full flex items-center justify-center">1</div>
-                        <div class="ml-4">STEP 1<br/><span class="font-bold">USER INFO</span></div>
+        <form class="form" id="registrationForm" novalidate>
+            <div class="page active">
+                <div class="title">Personal Information</div>
+                <div class="fields">
+                    <div class="input-field">
+                        <label>Full Name *</label>
+                        <input type="text" name="fullName" required 
+                               pattern="^[A-Za-z\s]{3,}$" 
+                               placeholder="Enter your full name"
+                               title="Name must contain at least 3 letters"
+                               oninput="validateField(this)">
+                        <span class="error-message"></span>
                     </div>
-                    <div class="flex items-center mb-6">
-                        <div class="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center">2</div>
-                        <div class="ml-4">STEP 2<br/><span class="font-bold">SHOP INFO</span></div>
+                    <div class="input-field">
+                        <label>Email *</label>
+                        <input type="email" name="email" id="userEmail" required 
+                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                               placeholder="Enter your email"
+                               title="Please enter a valid email address"
+                               oninput="validateField(this); updateUsername(this.value)">
+                        <span class="error-message"></span>
                     </div>
-                    <div class="flex items-center mb-6">
-                        <div class="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center">3</div>
-                        <div class="ml-4">STEP 3<br/><span class="font-bold">VERIFICATION</span></div>
+                    <div class="input-field">
+                        <label>Phone Number *</label>
+                        <input type="tel" name="phone" required 
+                               pattern="^[0-9]{10}$" 
+                               placeholder="Enter 10-digit number"
+                               title="Please enter a valid 10-digit phone number"
+                               oninput="validateField(this)">
+                        <span class="error-message"></span>
+                    </div>
+                   
+                </div>
+                <button class="next-btn" type="button">Next</button>
+            </div>
+
+            <div class="page">
+                <div class="title">Shop Information</div>
+                <div class="fields">
+                    <div class="input-field">
+                        <label>Shop Name *</label>
+                        <input type="text" name="shopName" required
+                               minlength="3"
+                               placeholder="Enter shop name"
+                               title="Shop name must be at least 3 characters long"
+                               oninput="validateField(this)">
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-field">
+                        <label>Shop Address Line 1 *</label>
+                        <input type="text" name="addressLine1" required
+                               placeholder="Street address"
+                               title="Please enter street address"
+                               oninput="validateField(this)">
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-field">
+                        <label>Shop Address Line 2</label>
+                        <input type="text" name="addressLine2"
+                               placeholder="Apartment, suite, etc. (optional)">
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-field">
+                        <label>City *</label>
+                        <input type="text" name="city" required
+                               pattern="^[A-Za-z\s]{2,}$"
+                               placeholder="Enter city name"
+                               title="Please enter a valid city name"
+                               oninput="validateField(this)">
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-field">
+                        <label>State *</label>
+                        <select name="state" required oninput="validateField(this)">
+                            <option value="">Select State</option>
+                            <option value="AP">Andhra Pradesh</option>
+                            <option value="DL">Delhi</option>
+                            <option value="KA">Karnataka</option>
+                            <option value="MH">Maharashtra</option>
+                            <!-- Add more states as needed -->
+                        </select>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-field">
+                        <label>Pincode *</label>
+                        <input type="text" name="pincode" required 
+                               pattern="^[0-9]{6}$" 
+                               placeholder="Enter 6-digit pincode"
+                               title="Please enter a valid 6-digit pincode"
+                               oninput="validateField(this)">
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-field">
+                        <label>Shop Type *</label>
+                        <select name="shopType" required oninput="validateField(this)">
+                            <option value="">Select Shop Type</option>
+                            <option value="retail">Retail Store</option>
+                            <option value="grocery">Grocery Store</option>
+                            <option value="electronics">Electronics Store</option>
+                            <option value="clothing">Clothing Store</option>
+                            <option value="restaurant">Restaurant</option>
+                            <option value="pharmacy">Pharmacy</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-field">
+                        <label>Business Category *</label>
+                        <select name="businessCategory" required oninput="validateField(this)">
+                            <option value="">Select Category</option>
+                            <option value="small">Small Business (≤ 10 employees)</option>
+                            <option value="medium">Medium Business (11-50 employees)</option>
+                            <option value="large">Large Business (> 50 employees)</option>
+                        </select>
+                        <span class="error-message"></span>
                     </div>
                 </div>
-                <!-- Decorative Image -->
-                <div class="mt-6">
-                    <img src="path_to_your_image.jpg" alt="Decorative" class="w-full rounded-lg opacity-80">
+                <div class="buttons">
+                    <button class="prev-btn" type="button">Previous</button>
+                    <button class="next-btn" type="button">Next</button>
                 </div>
             </div>
 
-            <!-- Form Content -->
-            <div class="md:w-2/3 p-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Register Your Shop</h2>
-                <p class="text-gray-500 mb-6">Please fill in the details below</p>
-
-                <form id="registrationForm" class="space-y-4">
-                    <!-- Section 1: User Information -->
-                    <div id="section1" class="space-y-4">
-                        <div class="flex gap-4">
-                            <div class="w-1/2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                            </div>
-                            <div class="w-1/2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                            <input type="tel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-                        <div class="pt-4">
-                            <button type="button" onclick="nextSection(1)" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-all">Next Step</button>
-                        </div>
+            <div class="page">
+                <div class="title">Security Details</div>
+                <div class="fields">
+                    <div class="input-field">
+                        <label>Username (Your Email)</label>
+                        <input type="text" name="username" id="usernameField" 
+                               readonly
+                               style="background-color: #f5f5f5; cursor: not-allowed;">
+                        <span class="error-message"></span>
                     </div>
-
-                    <!-- Section 2: Shop Information -->
-                    <div id="section2" class="hidden space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Shop Name</label>
-                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Shop Category</label>
-                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                                <option value="">Select a category</option>
-                                <option value="retail">Retail</option>
-                                <option value="food">Food & Beverage</option>
-                                <option value="services">Services</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Shop Description</label>
-                            <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" required></textarea>
-                        </div>
-                        <div class="flex gap-4 pt-4">
-                            <button type="button" onclick="previousSection(2)" class="w-1/2 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition-all">Previous</button>
-                            <button type="button" onclick="nextSection(2)" class="w-1/2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-all">Next Step</button>
-                        </div>
+                    <div class="input-field">
+                        <label>Password *</label>
+                        <input type="password" name="password" required 
+                               pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+                               placeholder="Create password"
+                               title="Password must be at least 8 characters with 1 letter, 1 number and 1 special character"
+                               oninput="validateField(this)">
+                        <span class="error-message"></span>
                     </div>
-
-                    <!-- Section 3: Verification -->
-                    <div id="section3" class="hidden space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Create Password</label>
-                            <div class="relative">
-                                <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                                <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                            <input type="password" id="confirmPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" required class="form-checkbox text-blue-600 rounded">
-                            <label class="ml-2 text-sm text-gray-600">
-                                I agree to the <a href="#" class="text-blue-600 hover:underline">Terms of Service</a>
-                            </label>
-                        </div>
-                        <div class="flex gap-4 pt-4">
-                            <button type="button" onclick="previousSection(3)" class="w-1/2 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition-all">Previous</button>
-                            <button type="submit" class="w-1/2 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-all">Complete Registration</button>
-                        </div>
+                    <div class="input-field">
+                        <label>Confirm Password *</label>
+                        <input type="password" name="confirmPassword" required
+                               placeholder="Confirm password"
+                               oninput="validateField(this)">
+                        <span class="error-message"></span>
                     </div>
-                </form>
+                    <div class="input-field">
+                        <label>Security Question *</label>
+                        <select name="securityQuestion" required oninput="validateField(this)">
+                            <option value="">Select Security Question</option>
+                            <option value="pet">What was your first pet's name?</option>
+                            <option value="school">What school did you first attend?</option>
+                            <option value="city">In which city were you born?</option>
+                        </select>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-field">
+                        <label>Security Answer *</label>
+                        <input type="text" name="securityAnswer" required
+                               placeholder="Enter your answer"
+                               oninput="validateField(this)">
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="prev-btn" type="button">Previous</button>
+                    <button type="submit">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="success-container">
+        <div class="success-message">
+            <i class="fas fa-check-circle"></i>
+            <h2>Registration Successful!</h2>
+            <p>Your account has been created successfully.</p>
+            <p>Welcome to our community!</p>
+            <div class="buttons">
+                <button onclick="window.location.href='login.html'" class="next-btn">
+                    <i class="fas fa-sign-in-alt"></i> Go to Login
+                </button>
+                <button onclick="window.location.href='index.html'" class="prev-btn">
+                    <i class="fas fa-home"></i> Back to Home
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Section -->
     <script>
-        // Form validation
-        const validateSection = (sectionNumber) => {
-            const section = document.getElementById(`section${sectionNumber}`);
-            const inputs = section.querySelectorAll('input, select, textarea');
-            let isValid = true;
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registrationForm');
+            const pages = document.querySelectorAll(".page");
+            const nextBtns = document.querySelectorAll(".next-btn");
+            const prevBtns = document.querySelectorAll(".prev-btn");
+            const bullets = document.querySelectorAll(".bullet");
+            let currentPage = 0;
 
-            inputs.forEach(input => {
-                if (input.required && !input.value) {
-                    isValid = false;
-                    showError(input, 'This field is required');
-                } else {
-                    clearError(input);
+            // Validation patterns
+            const patterns = {
+                fullName: /^[A-Za-z\s]{3,}$/,
+                email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                phone: /^[0-9]{10}$/,
+                pincode: /^[0-9]{6}$/,
+                password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+            };
+
+            // Validate single field
+            function validateField(input) {
+                const field = input.parentElement;
+                const errorDisplay = field.querySelector('.error-message');
+                
+                // Check if field is empty
+                if (input.required && input.value.trim() === '') {
+                    field.classList.add('error');
+                    errorDisplay.textContent = 'This field is required';
+                    return false;
                 }
 
-                // Email validation
-                if (input.type === 'email' && input.value) {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(input.value)) {
-                        isValid = false;
-                        showError(input, 'Please enter a valid email address');
+                // Validate patterns if they exist
+                if (input.pattern && input.value) {
+                    const regex = new RegExp(input.pattern);
+                    if (!regex.test(input.value)) {
+                        field.classList.add('error');
+                        errorDisplay.textContent = input.title;
+                        return false;
                     }
                 }
 
-                // Phone validation
-                if (input.type === 'tel' && input.value) {
-                    const phoneRegex = /^\d{10}$/;
-                    if (!phoneRegex.test(input.value)) {
-                        isValid = false;
-                        showError(input, 'Please enter a valid 10-digit phone number');
+                // Special validations
+                switch(input.name) {
+                    case 'dob':
+                        const age = calculateAge(new Date(input.value));
+                        if (age < 18) {
+                            field.classList.add('error');
+                            errorDisplay.textContent = 'You must be at least 18 years old';
+                            return false;
+                        }
+                        break;
+
+                    case 'confirmPassword':
+                    const password = document.querySelector('input[name="password"]');
+                    if (input.value !== password.value) {
+                        field.classList.add('error');
+                        errorDisplay.textContent = 'Passwords do not match';
+                        return false;
                     }
+                        break;
+                }
+
+                // If all validations pass
+                field.classList.remove('error');
+                errorDisplay.textContent = '';
+                return true;
+            }
+
+            function calculateAge(birthDate) {
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                
+                return age;
+            }
+
+            // Validate current page
+            function validatePage(pageIndex) {
+                const currentPageElement = pages[pageIndex];
+                const inputs = currentPageElement.querySelectorAll('input, select, textarea');
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    if (!validateField(input)) {
+                        isValid = false;
+                    }
+                });
+
+                return isValid;
+            }
+
+            // Add input event listeners for real-time validation
+            form.querySelectorAll('input, select, textarea').forEach(input => {
+                input.addEventListener('input', () => validateField(input));
+            });
+
+            // Next button click handler
+            nextBtns.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (validatePage(currentPage)) {
+                        pages[currentPage].classList.remove("active");
+                        currentPage++;
+                        pages[currentPage].classList.add("active");
+                        updateBullets();
+                    }
+                });
+            });
+
+            // Previous button click handler
+            prevBtns.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    pages[currentPage].classList.remove("active");
+                    currentPage--;
+                    pages[currentPage].classList.add("active");
+                    updateBullets();
+                });
+            });
+
+            // Update progress bullets
+            function updateBullets() {
+                bullets.forEach((bullet, index) => {
+                    if (index <= currentPage) {
+                        bullet.classList.add("active");
+                    } else {
+                        bullet.classList.remove("active");
+                    }
+                });
+            }
+
+            // Form submission
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                if (!validatePage(currentPage)) {
+                    return;
+                }
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+
+                try {
+                    // Show loading spinner
+                    document.querySelector('.loading').style.display = 'block';
+
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    // Hide form container
+                    document.querySelector('.container').style.opacity = '0';
+                    document.querySelector('.container').style.transform = 'translateY(-20px)';
+                    
+                    // Show success message with animation
+                    setTimeout(() => {
+                        document.querySelector('.container').style.display = 'none';
+                        document.querySelector('.success-container').style.display = 'block';
+                    }, 300);
+
+                } catch (error) {
+                    alert('An error occurred. Please try again.');
+                } finally {
+                    document.querySelector('.loading').style.display = 'none';
                 }
             });
 
-            return isValid;
-        };
-
-        const showError = (input, message) => {
-            input.classList.add('error-input');
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error-message';
-            errorDiv.textContent = message;
-            input.parentNode.appendChild(errorDiv);
-        };
-
-        const clearError = (input) => {
-            input.classList.remove('error-input');
-            const errorMessage = input.parentNode.querySelector('.error-message');
-            if (errorMessage) {
-                errorMessage.remove();
-            }
-        };
-
-        // Enhanced navigation functions
-        function nextSection(currentSection) {
-            if (validateSection(currentSection)) {
-                const currentElement = document.getElementById(`section${currentSection}`);
-                const nextElement = document.getElementById(`section${currentSection + 1}`);
-                
-                currentElement.classList.add('slide-out');
-                setTimeout(() => {
-                    currentElement.classList.add('hidden');
-                    currentElement.classList.remove('slide-out');
-                    nextElement.classList.remove('hidden');
-                    nextElement.classList.add('slide-in');
-                    updateProgress(currentSection + 1);
-                }, 300);
-            }
-        }
-
-        function previousSection(currentSection) {
-            const currentElement = document.getElementById(`section${currentSection}`);
-            const prevElement = document.getElementById(`section${currentSection - 1}`);
-            
-            currentElement.classList.add('slide-out');
-            setTimeout(() => {
-                currentElement.classList.add('hidden');
-                currentElement.classList.remove('slide-out');
-                prevElement.classList.remove('hidden');
-                prevElement.classList.add('slide-in');
-                updateProgress(currentSection - 1);
-            }, 300);
-        }
-
-        function updateProgress(step) {
-            const circles = document.querySelectorAll('.w-8');
-            circles.forEach((circle, index) => {
-                if (index + 1 <= step) {
-                    circle.classList.remove('bg-blue-400');
-                    circle.classList.add('bg-blue-800');
-                } else {
-                    circle.classList.remove('bg-blue-800');
-                    circle.classList.add('bg-blue-400');
+            // Add this JavaScript function to auto-populate the username
+            function updateUsername(email) {
+                const usernameField = document.getElementById('usernameField');
+                if (usernameField) {
+                    usernameField.value = email;
                 }
-            });
-        }
-
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const icon = document.querySelector('.fa-eye');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
-
-        // Form submission
-        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            if (!validateSection(3)) {
-                return;
-            }
-
-            const submitButton = e.target.querySelector('button[type="submit"]');
-            submitButton.classList.add('loading');
-
-            try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Success
-                alert('Registration completed successfully!');
-                // You can redirect or show success message here
-            } catch (error) {
-                alert('An error occurred. Please try again.');
-            } finally {
-                submitButton.classList.remove('loading');
             }
         });
     </script>
