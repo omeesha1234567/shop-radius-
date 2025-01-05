@@ -1,4 +1,4 @@
-<html lang="en"></html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -100,26 +100,18 @@
         .login-button {
             background-color: #231717;
             color: #ffffff;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: bold;
-            padding: 8px 16px;
-            width: 45%;
+            padding: 10px;
+            width: 40%;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .login-button:hover {
             background-color: #4a1b1b;
-            transform: translateY(-2px);
-        }
-
-        .login-button i {
-            margin-right: 8px;
         }
 
         /* Links */
@@ -144,7 +136,7 @@
 <body class="flex items-center justify-center min-h-screen relative">
 
                 <a href="templates/homepage.html" class="absolute top-4 left-4">
-                    <img src="images/logo.png" alt="Logo" />
+                    <img src="logo.png" alt="Logo" />
                 </a>
                 
                 
@@ -156,7 +148,7 @@
 
         
     <!-- Background Image -->
-    <img src="images/loginbg.jpg" alt="Background image" class="background-image" />
+    <img src="loginbg.jpg" alt="Background image" class="background-image" />
     <div class="overlay"></div>
 
     <!-- Login Form -->
@@ -181,13 +173,17 @@
             <!-- Login Buttons -->
             <div class="flex justify-between px-4 mb-4">
                 <button type="submit" name="role" value="customer" class="login-button">
-                    <i class="fas fa-user mr-2"></i>Customer Login
+                    <i class="fas fa-user mr-2"></i>Customer
                 </button>
                 <button type="submit" name="role" value="owner" class="login-button">
-                    <i class="fas fa-store mr-2"></i>Owner Login
+                    <i class="fas fa-store mr-2"></i>Owner
                 </button>
             </div>
         </form>
     </div>
 </body>
 </html>
+
+
+
+
