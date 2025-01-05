@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(45deg, #2C1810, #41150d, #D2691E);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .registration-container {
+            background: rgba(243, 173, 140, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 460px;
+            backdrop-filter: blur(20px);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        .registration-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #D2691E, transparent);
+            animation: borderLine 2s linear infinite;
+        }
+
+        @keyframes borderLine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        h2 {
+            text-align: center;
+            color: #2C1810;
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: #D2691E;
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #61280e;
+            font-size: 18px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #DEB887;
+            border-radius: 12px;
+            background-color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #8B4513;
+            outline: none;
+            box-shadow: 0 0 15px rgba(139, 69, 19, 0.2);
+            transform: translateX(5px);
+        }
+
+        .form-group input::placeholder {
+            color: #BC8F8F;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus::placeholder {
+            opacity: 0.7;
+            transform: translateX(10px);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(45deg, #3d210d, #5a2703);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .options-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #5D4037;
+        }
+
+        .remember-me input[type="checkbox"] {
+            accent-color: #8B4513;
+        }
+
+        .forgot-password {
+            color: #8B4513;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #D2691E;
+            text-decoration: underline;
+        }
+
+        .social-login {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #DEB887;
+        }
+
+        .social-login p {
+            color: #5D4037;
+            margin-bottom: 15px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #8B4513;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        
+
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <h2>Sign Up</h2>
+        <form id="registrationForm" name="registrationForm">
+            <div class="form-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="customerName" name="customerName" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-phone"></i>
+                <input type="tel" id="customerPhone" name="customerPhone" placeholder="Phone Number" pattern="[0-9]{10}" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="customerEmail" name="customerEmail" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-map-marker-alt"></i>
+                <input type="text" id="customerAddress" name="customerAddress" placeholder="Complete Address" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="customerPassword" name="customerPassword" placeholder="Create Password" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-key"></i>
+                <input type="password" id="customerConfirmPassword" name="customerConfirmPassword" placeholder="Confirm Password" required>
+            </div>
+           
+
+            <button type="submit" class="submit-btn">Create Account</button>
+
+            
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('customerPassword').value;
+            const confirmPassword = document.getElementById('customerConfirmPassword').value;
+            
+            if(password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // Add success animation
+            const btn = document.querySelector('.submit-btn');
+            btn.innerHTML = '<i class="fas fa-check"></i> Success!';
+            btn.style.background = '#4CAF50';
+            
+            setTimeout(() => {
+                alert('Registration Successful!');
+                this.reset();
+                btn.innerHTML = 'Create Account';
+                btn.style.background = 'linear-gradient(45deg, #3d210d, #5a2703)';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
