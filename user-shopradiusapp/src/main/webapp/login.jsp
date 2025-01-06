@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en"></html>
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -100,18 +100,26 @@
         .login-button {
             background-color: #231717;
             color: #ffffff;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
-            padding: 10px;
-            width: 40%;
+            padding: 8px 16px;
+            width: 45%;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .login-button:hover {
             background-color: #4a1b1b;
+            transform: translateY(-2px);
+        }
+
+        .login-button i {
+            margin-right: 8px;
         }
 
         /* Links */
@@ -136,7 +144,7 @@
 <body class="flex items-center justify-center min-h-screen relative">
 
                 <a href="templates/homepage.html" class="absolute top-4 left-4">
-                    <img src="logo.png" alt="Logo" />
+                    <img src="images/logo.png" alt="Logo" />
                 </a>
                 
                 
@@ -148,7 +156,7 @@
 
         
     <!-- Background Image -->
-    <img src="loginbg.jpg" alt="Background image" class="background-image" />
+    <img src="images/loginbg.jpg" alt="Background image" class="background-image" />
     <div class="overlay"></div>
 
     <!-- Login Form -->
@@ -156,23 +164,29 @@
                     <!-- Additional Links -->
                  
         <div class="login-icon">
-            <i class="fas fa-users"class="login-title"></i>
+            <i class="fas fa-users",class="login-title"></i>
         </div>
         <!-- <h2 class="login-title">MEMBER LOGIN</h2> -->
-        <form>
+        <form action="/validate-login" method="POST">
             <!-- Username Field -->
             <div class="input-group">
                 <i class="fas fa-user"></i>
-                <input type="text" placeholder="Username" />
+                <input type="text" name="username" placeholder="Username" required />
             </div>
             <!-- Password Field -->
             <div class="input-group">
                 <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Password" />
+                <input type="password" name="password" placeholder="Password" required />
             </div>
-            <!-- Login Button -->
-            <button type="submit" class="login-button">Login</button>
-
+            <!-- Login Buttons -->
+            <div class="flex justify-between px-4 mb-4">
+                <button type="submit" name="role" value="customer" class="login-button">
+                    <i class="fas fa-user mr-2"></i>Customer Login
+                </button>
+                <button type="submit" name="role" value="owner" class="login-button">
+                    <i class="fas fa-store mr-2"></i>Owner Login
+                </button>
+            </div>
         </form>
     </div>
 </body>

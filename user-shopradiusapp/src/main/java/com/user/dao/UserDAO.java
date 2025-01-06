@@ -11,9 +11,9 @@ import com.user.model.User;
 
 public class UserDAO {
 
-    private String jdbcURL = "jdbc:mysql://localhost:30006/userappdb";
+    private String jdbcURL = "jdbc:mysql://localhost:3306/userappdb";
     private String jdbcUserName = "root";
-    private String jdbcPassword = "root";
+    private String jdbcPassword = "Ashuyadav@28";
     private static final String INSERT_USER_SQL = "INSERT INTO users (uname, email, country, passwd) VALUES (?, ?, ?, ?);";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM USERS WHERE ID=?;";
     private static final String SELECT_ALL_USERS = "SELECT * FROM USERS;";

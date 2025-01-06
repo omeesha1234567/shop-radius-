@@ -648,19 +648,19 @@
 
             
             <div class="signup-options">
-                <a href="owner.html" class="signup-btn">
+                <a href="customer-register" class="signup-btn">
                     <i class="fas fa-store"></i>
                     Signup as Shop Owner
                 </a>
                 <div class="divider">
                     <span>or</span>
                 </div>
-                <a href="customer.html" class="signup-btn">
+                <a href="customer.jsp" class="signup-btn">
                     <i class="fas fa-user"></i>
                     Signup as Customer
                 </a>
                 <div class="register-link">
-                Already have an account? <a href="login.html">Login here</a></div>
+                Already have an account? <a href="login">Login here</a></div>
             </div>
         </div>
         

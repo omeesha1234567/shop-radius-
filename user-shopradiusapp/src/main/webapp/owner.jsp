@@ -363,7 +363,7 @@
             </div>
         </div>
 
-        <form class="form" id="registrationForm" novalidate>
+        <form class="form" id="registrationForm" method="POST" action="customer-register" novalidate>
             <div class="page active">
                 <div class="title">Personal Information</div>
                 <div class="fields">
@@ -405,6 +405,7 @@
                     <div class="input-field">
                         <label>Shop Name *</label>
                         <input type="text" name="shopName" required
+                               minlength="3"
                                placeholder="Enter shop name"
                                title="Shop name must be at least 3 characters long"
                                oninput="validateField(this)">
@@ -554,183 +555,149 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('registrationForm');
-            const pages = document.querySelectorAll(".page");
-            const nextBtns = document.querySelectorAll(".next-btn");
-            const prevBtns = document.querySelectorAll(".prev-btn");
-            const bullets = document.querySelectorAll(".bullet");
-            let currentPage = 0;
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('registrationForm');
+        const pages = document.querySelectorAll(".page");
+        const nextBtns = document.querySelectorAll(".next-btn");
+        const prevBtns = document.querySelectorAll(".prev-btn");
+        const bullets = document.querySelectorAll(".bullet");
+        let currentPage = 0;
 
-            // Validation patterns
-            const patterns = {
-                fullName: /^[A-Za-z\s]{3,}$/,
-                email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                phone: /^[0-9]{10}$/,
-                pincode: /^[0-9]{6}$/,
-                password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
-            };
+        // Validation patterns
+        const patterns = {
+            fullName: /^[A-Za-z\s]{3,}$/,
+            email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            phone: /^[0-9]{10}$/,
+            pincode: /^[0-9]{6}$/,
+            password: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+        };
 
-            // Validate single field
-            function validateField(input) {
-                const field = input.parentElement;
-                const errorDisplay = field.querySelector('.error-message');
-                
-                // Check if field is empty
-                if (input.required && input.value.trim() === '') {
+        // Validate single field
+        function validateField(input) {
+            const field = input.parentElement;
+            const errorDisplay = field.querySelector('.error-message');
+
+            // Check if field is empty
+            if (input.required && input.value.trim() === '') {
+                field.classList.add('error');
+                errorDisplay.textContent = 'This field is required';
+                return false;
+            }
+
+            // Validate patterns if they exist
+            if (input.pattern && input.value) {
+                const regex = new RegExp(input.pattern);
+                if (!regex.test(input.value)) {
                     field.classList.add('error');
-                    errorDisplay.textContent = 'This field is required';
+                    errorDisplay.textContent = input.title;
                     return false;
                 }
+            }
 
-                // Validate patterns if they exist
-                if (input.pattern && input.value) {
-                    const regex = new RegExp(input.pattern);
-                    if (!regex.test(input.value)) {
+            // Special validations
+            switch (input.name) {
+                case 'dob':
+                    const age = calculateAge(new Date(input.value));
+                    if (age < 18) {
                         field.classList.add('error');
-                        errorDisplay.textContent = input.title;
+                        errorDisplay.textContent = 'You must be at least 18 years old';
                         return false;
                     }
-                }
+                    break;
 
-                // Special validations
-                switch(input.name) {
-                    case 'dob':
-                        const age = calculateAge(new Date(input.value));
-                        if (age < 18) {
-                            field.classList.add('error');
-                            errorDisplay.textContent = 'You must be at least 18 years old';
-                            return false;
-                        }
-                        break;
-
-                    case 'confirmPassword':
+                case 'confirmPassword':
                     const password = document.querySelector('input[name="password"]');
                     if (input.value !== password.value) {
                         field.classList.add('error');
                         errorDisplay.textContent = 'Passwords do not match';
                         return false;
                     }
-                        break;
+                    break;
+            }
+
+            // If all validations pass
+            field.classList.remove('error');
+            errorDisplay.textContent = '';
+            return true;
+        }
+
+        function calculateAge(birthDate) {
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            return age;
+        }
+
+        // Validate current page
+        function validatePage(pageIndex) {
+            const currentPageElement = pages[pageIndex];
+            const inputs = currentPageElement.querySelectorAll('input, select, textarea');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                if (!validateField(input)) {
+                    isValid = false;
                 }
-
-                // If all validations pass
-                field.classList.remove('error');
-                errorDisplay.textContent = '';
-                return true;
-            }
-
-            function calculateAge(birthDate) {
-                const today = new Date();
-                let age = today.getFullYear() - birthDate.getFullYear();
-                const monthDiff = today.getMonth() - birthDate.getMonth();
-                
-                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
-                }
-                
-                return age;
-            }
-
-            // Validate current page
-            function validatePage(pageIndex) {
-                const currentPageElement = pages[pageIndex];
-                const inputs = currentPageElement.querySelectorAll('input, select, textarea');
-                let isValid = true;
-
-                inputs.forEach(input => {
-                    if (!validateField(input)) {
-                        isValid = false;
-                    }
-                });
-
-                return isValid;
-            }
-
-            // Add input event listeners for real-time validation
-            form.querySelectorAll('input, select, textarea').forEach(input => {
-                input.addEventListener('input', () => validateField(input));
             });
 
-            // Next button click handler
-            nextBtns.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (validatePage(currentPage)) {
-                        pages[currentPage].classList.remove("active");
-                        currentPage++;
-                        pages[currentPage].classList.add("active");
-                        updateBullets();
-                    }
-                });
-            });
+            return isValid;
+        }
 
-            // Previous button click handler
-            prevBtns.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
+        // Add input event listeners for real-time validation
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('input', () => validateField(input));
+        });
+
+        // Next button click handler
+        nextBtns.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (validatePage(currentPage)) {
                     pages[currentPage].classList.remove("active");
-                    currentPage--;
+                    currentPage++;
                     pages[currentPage].classList.add("active");
                     updateBullets();
-                });
-            });
-
-            // Update progress bullets
-            function updateBullets() {
-                bullets.forEach((bullet, index) => {
-                    if (index <= currentPage) {
-                        bullet.classList.add("active");
-                    } else {
-                        bullet.classList.remove("active");
-                    }
-                });
-            }
-
-            // Form submission
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-
-                if (!validatePage(currentPage)) {
-                    return;
-                }
-
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData);
-
-                try {
-                    // Show loading spinner
-                    document.querySelector('.loading').style.display = 'block';
-
-                    // Simulate API call
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-
-                    // Hide form container
-                    document.querySelector('.container').style.opacity = '0';
-                    document.querySelector('.container').style.transform = 'translateY(-20px)';
-                    
-                    // Show success message with animation
-                    setTimeout(() => {
-                        document.querySelector('.container').style.display = 'none';
-                        document.querySelector('.success-container').style.display = 'block';
-                    }, 300);
-
-                } catch (error) {
-                    alert('An error occurred. Please try again.');
-                } finally {
-                    document.querySelector('.loading').style.display = 'none';
                 }
             });
-
-            // Add this JavaScript function to auto-populate the username
-            function updateUsername(email) {
-                const usernameField = document.getElementById('usernameField');
-                if (usernameField) {
-                    usernameField.value = email;
-                }
-            }
         });
-    </script>
+
+        // Previous button click handler
+        prevBtns.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                pages[currentPage].classList.remove("active");
+                currentPage--;
+                pages[currentPage].classList.add("active");
+                updateBullets();
+            });
+        });
+
+        // Update progress bullets
+        function updateBullets() {
+            bullets.forEach((bullet, index) => {
+                if (index <= currentPage) {
+                    bullet.classList.add("active");
+                } else {
+                    bullet.classList.remove("active");
+                }
+            });
+        }
+
+        // Add this JavaScript function to auto-populate the username
+        function updateUsername(email) {
+            const usernameField = document.getElementById('usernameField');
+            if (usernameField) {
+                usernameField.value = email;
+            }
+        }
+    });
+</script>
+
 </body>
 </html>
