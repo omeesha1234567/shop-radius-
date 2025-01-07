@@ -655,12 +655,12 @@
                 <div class="divider">
                     <span>or</span>
                 </div>
-                <a href="customer.jsp" class="signup-btn">
+                <a href="signup" class="signup-btn">
                     <i class="fas fa-user"></i>
                     Signup as Customer
                 </a>
                 <div class="register-link">
-                Already have an account? <a href="login">Login here</a></div>
+                Already have an account? <a href="LoginServlet">Login here</a></div>
             </div>
         </div>
         
@@ -682,8 +682,8 @@
                 <div class="card">
                     <img src="images/images2.jpeg" alt="Fresh Products">
                     <div class="content">
-                        <h3>Card Title</h3>
-                        <p>Card description here...</p>
+                        <h3>Spices</h3>
+                        <p>Golden spice with earthy flavor, known for its anti-inflammatory properties</p>
                     </div>
                 </div>
             </div>
@@ -700,8 +700,8 @@
                 <div class="card">
                     <img src="images/images4.jpg" alt="Fast Delivery">
                     <div class="content">
-                        <h3>Card Title</h3>
-                        <p>Card description here...</p>
+                        <h3>store</h3>
+                        <p> Discover quality [products] at unbeatable prices.</p>
                     </div>
                 </div>
             </div>

@@ -3,16 +3,18 @@ create database userappdb;
 
 use userappdb;
 
-create table users
-
-(
-
-    id integer auto_increment primary key,
-    uname varchar(100) not null,
-    email varchar(50) not null unique, 
-    country varchar(50) not null, 
-    passwd varchar(20) not null
-
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    phone VARCHAR(10) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    addressLine1 VARCHAR(100) NOT NULL,
+    addressLine2 VARCHAR(100),
+    city VARCHAR(50) NOT NULL,
+    state VARCHAR(50) NOT NULL,
+    pincode VARCHAR(6) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    isShopOwner BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE customers (

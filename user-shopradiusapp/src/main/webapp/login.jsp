@@ -1,4 +1,5 @@
-<html lang="en"></html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -55,15 +56,6 @@
             font-size: 3rem;
             color: #231717;
             margin-bottom: 20px;
-        }
-
-        /* Title Styling */
-        .login-title {
-            font-size: 10%;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #452d2d;
-            font-family:Georgia, 'Times New Roman', Times, serif;
         }
 
         /* Input Group */
@@ -131,7 +123,6 @@
         .login-links a {
             color: #351313;
             text-decoration: none;
-            margin: top;
             transition: color 0.3s ease;
         }
 
@@ -142,52 +133,41 @@
 </head>
 
 <body class="flex items-center justify-center min-h-screen relative">
+    <!-- Logo -->
+    <a href="templates/homepage.html" class="absolute top-4 left-4">
+        <img src="images/logo.png" alt="Logo" />
+    </a>
 
-                <a href="templates/homepage.html" class="absolute top-4 left-4">
-                    <img src="images/logo.png" alt="Logo" />
-                </a>
-                
-                
-
-    <!-- <div class="login-links absolute top-4 right-4">
-        <a href="homepage.html"class="login-links" <i class="fas fa-store"></i>Homepage</a>
-    </div>
-     -->
-
-        
     <!-- Background Image -->
     <img src="images/loginbg.jpg" alt="Background image" class="background-image" />
     <div class="overlay"></div>
 
     <!-- Login Form -->
     <div class="login-container">
-                    <!-- Additional Links -->
-                 
         <div class="login-icon">
-            <i class="fas fa-users",class="login-title"></i>
+            <i class="fas fa-users"></i>
         </div>
-        <!-- <h2 class="login-title">MEMBER LOGIN</h2> -->
-        <form action="/validate-login" method="POST">
-            <!-- Username Field -->
+        <form action="LoginServlet" method="POST">
+            <!-- Email Field -->
             <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="text" name="username" placeholder="Username" required />
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" placeholder="Email" required />
             </div>
             <!-- Password Field -->
             <div class="input-group">
                 <i class="fas fa-lock"></i>
                 <input type="password" name="password" placeholder="Password" required />
             </div>
-            <!-- Login Buttons -->
+            <!-- Login Button -->
             <div class="flex justify-between px-4 mb-4">
-                <button type="submit" name="role" value="customer" class="login-button">
-                    <i class="fas fa-user mr-2"></i>Customer Login
-                </button>
-                <button type="submit" name="role" value="owner" class="login-button">
-                    <i class="fas fa-store mr-2"></i>Owner Login
+                <button style="margin-left: 85px" type="submit" class="login-button">
+                    <i class="fas fa-sign-in-alt"></i>Login
                 </button>
             </div>
         </form>
+        <div class="login-links">
+            <a href="signup.jsp">New user? Sign up here</a>
+        </div>
     </div>
 </body>
 </html>

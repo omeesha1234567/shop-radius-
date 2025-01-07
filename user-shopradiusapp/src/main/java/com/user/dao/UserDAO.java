@@ -1,122 +1,94 @@
 package com.user.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import com.user.model.User;
+import java.sql.*;
 
 public class UserDAO {
+    private Connection connection;
 
-    private String jdbcURL = "jdbc:mysql://localhost:3306/userappdb";
+    // Connection settings
+    private String jdbcURL = "jdbc:mysql://localhost:3306/userappdb?useSSL=false&serverTimezone=UTC";
     private String jdbcUserName = "root";
     private String jdbcPassword = "Ashuyadav@28";
-    private static final String INSERT_USER_SQL = "INSERT INTO users (uname, email, country, passwd) VALUES (?, ?, ?, ?);";
-    private static final String SELECT_USER_BY_ID = "SELECT * FROM USERS WHERE ID=?;";
-    private static final String SELECT_ALL_USERS = "SELECT * FROM USERS;";
-    private static final String DELETE_USERS_SQL = "DELETE FROM USERS WHERE ID=?;";
-    private static final String UPDATE_USERS_SQL = "UPDATE USERS SET UNAME=?, EMAIL=?, COUNTRY=?, PASSWORD=? WHERE ID=?;";
 
+    private static final String INSERT_USER_SQL = "INSERT INTO users (userName, userPhone, userEmail, userAddressLine1, userAddressLine2, userCity, userPincode, userState, userPassword, isShopOwner) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_USER_BY_EMAIL_AND_PASSWORD = "SELECT * FROM users WHERE userEmail = ? AND userPassword = ?";
+
+    // Constructor to initialize the connection
     public UserDAO() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-    public Connection getConnection() {
-        Connection connection = null;
         try {
+            // Load the MySQL JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
+            // Establish the connection
             connection = DriverManager.getConnection(jdbcURL, jdbcUserName, jdbcPassword);
-        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println("Database connection successful");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error: MySQL JDBC Driver not found.");
             e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return connection;
-    }
-
-    public void insertUser(User user) {
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getCountry());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            System.out.println("Error: Unable to establish database connection.");
             e.printStackTrace();
         }
     }
 
-    public User selectUser(int id) {
-        User user = new User();
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)) {
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
+    // Method to register a user in the database
+    public boolean registerUser(User user) {
+        System.out.println("Registering user: " + user.getUserName());
+        
+        try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
+            // Set parameters in the SQL query
+            preparedStatement.setString(1, user.getUserName());
+            preparedStatement.setString(2, user.getUserPhone());
+            preparedStatement.setString(3, user.getUserEmail());
+            preparedStatement.setString(4, user.getUserAddressLine1());
+            preparedStatement.setString(5, user.getUserAddressLine2());
+            preparedStatement.setString(6, user.getUserCity());
+            preparedStatement.setString(7, user.getUserPincode());
+            preparedStatement.setString(8, user.getUserState());
+            preparedStatement.setString(9, user.getUserPassword());
+            preparedStatement.setBoolean(10, user.isShopOwner());
 
-            while (resultSet.next()) {
-                user.setId(id);
-                user.setName(resultSet.getString("uname"));
-                user.setEmail(resultSet.getString("email"));
-                user.setCountry(resultSet.getString("country"));
-                user.setPassword(resultSet.getString("passwd"));
+            int rowsInserted = preparedStatement.executeUpdate();
+
+            if (rowsInserted > 0) {
+                System.out.println("User registered successfully: " + user.getUserName());
+                return true; // Registration success
+            } else {
+                System.out.println("User registration failed: No rows affected.");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            System.out.println("SQL Exception occurred during user registration.");
             e.printStackTrace();
         }
-        return user;
+        
+        return false; // Registration failed
     }
 
-    public List<User> selectAllUsers() {
-        List<User> users = new ArrayList<>();
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
+    // Method to log in the user by email and password
+    public User loginUser(String email, String password) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_EMAIL_AND_PASSWORD)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, password);
+            ResultSet rs = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String uname = resultSet.getString("uname");
-                String email = resultSet.getString("email");
-                String country = resultSet.getString("country");
-                String password = resultSet.getString("passwd");
-                users.add(new User(id, uname, email, country, password));
+            if (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("userId"));
+                user.setUserName(rs.getString("userName"));
+                user.setUserPhone(rs.getString("userPhone"));
+                user.setUserEmail(rs.getString("userEmail"));
+                user.setUserAddressLine1(rs.getString("userAddressLine1"));
+                user.setUserAddressLine2(rs.getString("userAddressLine2"));
+                user.setUserCity(rs.getString("userCity"));
+                user.setUserPincode(rs.getString("userPincode"));
+                user.setUserState(rs.getString("userState"));
+                user.setShopOwner(rs.getBoolean("isShopOwner"));
+                return user;
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            System.out.println("SQL Exception occurred during user login.");
             e.printStackTrace();
         }
-        return users;
+        return null;
     }
-
-    public boolean deleteUser(int id) {
-        boolean status = false;
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USERS_SQL)) {
-            preparedStatement.setInt(1, id);
-            status = preparedStatement.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return status;
-    }
-    
-    public boolean updateUser(User user) {
-        boolean rowUpdated = false;
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USERS_SQL)) {
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getCountry());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setInt(5, user.getId());
-            rowUpdated = preparedStatement.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return rowUpdated;
-    }
-
 }

@@ -4,24 +4,5 @@
 
 <web-app>
     <display-name>ShopRadius</display-name>
-    <servlet>
-    	<servlet-name>CustomerRegisterServlet</servlet-name>
-    	<display-name>CustomerRegisterServlet</display-name>
-    	<description></description>
-    	<servlet-class>com.customer.model.CustomerRegisterServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-    	<servlet-name>CustomerRegisterServlet</servlet-name>
-    	<url-pattern>/CustomerRegisterServlet</url-pattern>
-    </servlet-mapping>
-    <servlet>
-    	<servlet-name>ItemServlet</servlet-name>
-    	<display-name>ItemServlet</display-name>
-    	<description></description>
-    	<servlet-class>com.item.model.ItemServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-    	<servlet-name>ItemServlet</servlet-name>
-    	<url-pattern>/ItemsServlet</url-pattern>
-    </servlet-mapping>
+	
 </web-app>

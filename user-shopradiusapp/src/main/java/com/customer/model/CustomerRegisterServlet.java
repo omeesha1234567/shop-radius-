@@ -95,7 +95,7 @@ public class CustomerRegisterServlet extends HttpServlet {
             System.out.println("Customer registered successfully!");
 
             // Redirect to a success page or login page after successful registration
-            response.sendRedirect("Items");
+            response.sendRedirect("shopOwnerDashboard.jsp");
         } catch (Exception e) {
             // Log any exceptions that occur during the process
             System.out.println("Error during customer registration: " + e.getMessage());

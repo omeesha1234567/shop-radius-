@@ -489,13 +489,13 @@
             <div class="page">
                 <div class="title">Security Details</div>
                 <div class="fields">
-                    <div class="input-field">
-                        <label>Username (Your Email)</label>
-                        <input type="text" name="username" id="usernameField" 
-                               readonly
-                               style="background-color: #f5f5f5; cursor: not-allowed;">
-                        <span class="error-message"></span>
-                    </div>
+					 <div class="input-field">
+					    <label>Username (Your Email)</label>
+					    <input type="text" name="username" id="usernameField" 
+					           style="background-color: #f5f5f5;" 
+					           value="" />
+					    <span class="error-message"></span>
+					</div>
                     <div class="input-field">
                         <label>Password *</label>
                         <input type="password" name="password" required 
@@ -572,6 +572,12 @@
             pincode: /^[0-9]{6}$/,
             password: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
         };
+        function updateUsername(email) {
+            const usernameField = document.getElementById('usernameField');
+            if (usernameField && email) {
+                usernameField.value = email; // Automatically sets the username field to email
+            }
+        }
 
         // Validate single field
         function validateField(input) {
